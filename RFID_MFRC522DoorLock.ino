@@ -37,14 +37,17 @@
 
 #include <SPI.h>
 #include <MFRC522.h>
+#include <LiquidCrystal.h> // Library untuk LCD
 
 #define RST_PIN         9          // Configurable, see typical pin layout above
 #define SS_PIN          10         // Configurable, see typical pin layout above
 
 MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance
+LiquidCrystal lcd(A0, A1, A2, A3, A4, A5);
 
 #define GREEN_LED_PIN 7
 #define RED_LED_PIN 6
+#define BUZZER_PIN 8
 
 byte validUID[7] = {0x05, 0x83, 0x0C, 0x5A, 0xBA, 0xD1, 0x00};
 
@@ -57,11 +60,18 @@ void setup() {
 	// mfrc522.PCD_DumpVersionToSerial();	// Show details of PCD - MFRC522 Card Reader details
 	Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
 
+  lcd.begin(16, 2);        // Inisialisasi LCD 16x2
+  delay(100); 
+  lcd.clear();
+  lcd.print("Scan Kartu");
+
   pinMode(GREEN_LED_PIN, OUTPUT);
   pinMode(RED_LED_PIN, OUTPUT);
+  pinMode(BUZZER_PIN, OUTPUT);
 
   digitalWrite(GREEN_LED_PIN, LOW);
   digitalWrite(RED_LED_PIN, LOW);
+  digitalWrite(BUZZER_PIN, LOW);
 }
 
 void loop() {
@@ -90,14 +100,18 @@ void loop() {
     Serial.println("Valid Card, turning GREEN LED on.");
     digitalWrite(GREEN_LED_PIN, HIGH);
     digitalWrite(RED_LED_PIN, LOW);
+    tone(BUZZER_PIN, 1000);
     delay(3000);
     digitalWrite(GREEN_LED_PIN, LOW);
+    noTone(BUZZER_PIN);
   } else {
     Serial.println("Invalid Card, turning RED LED on.");
     digitalWrite(GREEN_LED_PIN, LOW);
     digitalWrite(RED_LED_PIN, HIGH);
-    delay(3000);
+    tone(BUZZER_PIN, 10);
+    delay(300);
     digitalWrite(RED_LED_PIN, LOW);
+    noTone(BUZZER_PIN);
   }
 
   mfrc522.PICC_HaltA();
