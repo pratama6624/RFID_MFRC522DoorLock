@@ -1,5 +1,7 @@
 # Arduino RFID Card Validation with LEDs, Buzzer, and Potentiometer
 
+![Screenshot 2024-10-24 at 8 44 27 PM](https://github.com/user-attachments/assets/b02c4395-5a6e-461e-9439-5be7e8a43047)
+
 This project demonstrates how to create a system that validates a specific RFID card using an Arduino Uno, MFRC522 RFID module, LEDs (red and green), an active buzzer, and a potentiometer. The system lights a green LED if the card is valid and lights a red LED while sounding the buzzer repeatedly for 3 seconds if the card is invalid. The potentiometer is used to control the buzzer's volume.
 
 ## Components Used:
